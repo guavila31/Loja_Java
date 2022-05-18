@@ -19,24 +19,26 @@ import jpa.CategoriaProdutoDAO;
 import jpa.ProdutoDAO;
 
 public class FrameMenu extends javax.swing.JFrame {
-    
+
     public FrameMenu() {
         DialogAutenticacao telaLogin = new DialogAutenticacao(this, true);
         telaLogin.setVisible(true);
         if (telaLogin.getAutenticado()) {
             initComponents();
-            
+/*
             CategoriaProdutoDAO cDAO = new CategoriaProdutoDAO();
             cDAO.inserir(new CategoriaProduto(0, "Categoria 1"));
-            cDAO.inserir(new CategoriaProduto(0, "Categoria 2"));
 
+            cDAO = new CategoriaProdutoDAO();
             ProdutoDAO pDAO = new ProdutoDAO();
-            Produto p = new Produto(WIDTH, "Produto 1", 2, 45.2);
+            Produto p = new Produto(0, "Produto 1", 1, 45.2);
             p.setCategoriaProduto(cDAO.selecionarPorId(1));
             pDAO.inserir(p);
+
+*/
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -188,7 +190,7 @@ public class FrameMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        
+
         DialogAlterarSenha dialog = new DialogAlterarSenha(this, true);
         dialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -249,14 +251,14 @@ public class FrameMenu extends javax.swing.JFrame {
             tela.moveToFront();
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
-    
+
     public static void main(String args[]) {
-        
+
         FlatLightLaf.setup(new FlatGruvboxDarkMediumIJTheme());
         UIManager.put("Button.arc", 10);
         UIManager.put("TextComponent.arc", 10);
         UIManager.put("Desktop.background", Color.darkGray);
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FrameMenu().setVisible(true);

@@ -23,8 +23,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tab_categoria_produto")
 @NamedQueries({
-@NamedQuery(name = "CategoriaProduto.finfAll",query = "SELECT c FROM CategoriaProduto c"),
-@NamedQuery(name = "CategoriaProduto.finfById",query = "SELECT c FROM CategoriaProduto c WHERE c.id = :codigo")
+@NamedQuery(name = "CategoriaProduto.findAll",query = "SELECT c FROM CategoriaProduto c"),
+@NamedQuery(name = "CategoriaProduto.findById",query = "SELECT c FROM CategoriaProduto c WHERE c.id = :codigo")
 })
 public class CategoriaProduto implements Serializable {
 
