@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import jpa.CategoriaProdutoDAO;
+import reports.GeradorRelatorio;
 import utils.TableModelCreator;
 
 /**
@@ -19,6 +20,7 @@ import utils.TableModelCreator;
 public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
 
     private static InternalConsultaCategoria instance;
+    private Integer idSelecionado;
 
     public static InternalConsultaCategoria getInstance() {
         if (instance == null) {
@@ -48,6 +50,7 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
         btnExcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -89,6 +92,11 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
 
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -107,20 +115,31 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        jButton1.setText("Imprimir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAdicionar)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnExcluir))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -130,9 +149,10 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdicionar)
                     .addComponent(btnEditar)
-                    .addComponent(btnExcluir))
+                    .addComponent(btnExcluir)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
@@ -141,10 +161,16 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         // TODO add your handling code here:
+        DialogCadastroCategoria c = new DialogCadastroCategoria(null, true, null);
+        c.setVisible(true);
+        atualizaTabela();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
+        DialogCadastroCategoria c = new DialogCadastroCategoria(null, true, idSelecionado);
+        c.setVisible(true);
+        atualizaTabela();
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
@@ -169,19 +195,42 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         JTable source = (JTable) evt.getSource();
         int row = source.rowAtPoint(evt.getPoint());
-        int column = jTable1.convertColumnIndexToView(jTable1.getColumn("Id").getModelIndex());
+        int column = jTable1.convertColumnIndexToView(jTable1.getColumn("Id ").getModelIndex());
 
         String s = source.getModel().getValueAt(row, column) + "";
-        JOptionPane.showMessageDialog(null, s);
+        idSelecionado = Integer.parseInt(s);
         btnEditar.setEnabled(true);
         btnExcluir.setEnabled(true);
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (JOptionPane.showConfirmDialog(this, "Deseja Excluir esse Item?", "ATENÇÃO", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                CategoriaProdutoDAO cDAO = new CategoriaProdutoDAO();
+                CategoriaProduto c = cDAO.selecionarPorId(idSelecionado);
+                cDAO.excluir(c);
+                JOptionPane.showMessageDialog(this, "Excluido com sucesso", "SUCESSO", JOptionPane.INFORMATION_MESSAGE);
+                atualizaTabela();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "ERRO: " + ex.getMessage(), "Exclusão", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        GeradorRelatorio rel = new GeradorRelatorio();
+        rel.Gerar(this, "categorias", "Listagem", jTable1);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

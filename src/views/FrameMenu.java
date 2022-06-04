@@ -4,8 +4,12 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkMediumIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
 import entity.CategoriaProduto;
-import entity.Produto;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
@@ -14,9 +18,18 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import jpa.CategoriaProdutoDAO;
-import jpa.ProdutoDAO;
+import reports.Footer;
+import reports.GeradorRelatorio;
+import reports.Header;
+import reports.ListagemCategoria;
+import java.util.List;
 
 public class FrameMenu extends javax.swing.JFrame {
 
@@ -25,7 +38,7 @@ public class FrameMenu extends javax.swing.JFrame {
         telaLogin.setVisible(true);
         if (telaLogin.getAutenticado()) {
             initComponents();
-/*
+            /*
             CategoriaProdutoDAO cDAO = new CategoriaProdutoDAO();
             cDAO.inserir(new CategoriaProduto(0, "Categoria 1"));
 
@@ -35,7 +48,7 @@ public class FrameMenu extends javax.swing.JFrame {
             p.setCategoriaProduto(cDAO.selecionarPorId(1));
             pDAO.inserir(p);
 
-*/
+             */
         }
     }
 
@@ -56,10 +69,13 @@ public class FrameMenu extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenu7 = new javax.swing.JMenu();
+        jMenu8 = new javax.swing.JMenu();
 
         jMenu6.setText("Menu");
 
@@ -95,7 +111,7 @@ public class FrameMenu extends javax.swing.JFrame {
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 463, Short.MAX_VALUE)
+            .addGap(0, 457, Short.MAX_VALUE)
         );
 
         jMenu1.setText("Arquivo");
@@ -145,9 +161,6 @@ public class FrameMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Relatorio");
-        jMenuBar1.add(jMenu3);
-
         jMenu4.setText("Sobre");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
@@ -169,7 +182,26 @@ public class FrameMenu extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem3);
 
+        jMenu3.setText("Relatorio");
+
+        jMenuItem8.setText("Listagem de Categorias");
+        jMenu3.add(jMenuItem8);
+
+        jMenu4.add(jMenu3);
+
         jMenuBar1.add(jMenu4);
+
+        jMenu7.setText("Relatorio");
+
+        jMenu8.setText("Listagem de categoria");
+        jMenu8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu8ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenu8);
+
+        jMenuBar1.add(jMenu7);
 
         setJMenuBar(jMenuBar1);
 
@@ -252,6 +284,49 @@ public class FrameMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jMenu8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu8ActionPerformed
+        // TODO add your handling code here:
+        
+        
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.showSaveDialog(this);
+        if (chooser.getSelectedFile() != null) {
+            String pasta = chooser.getSelectedFile().getPath();
+            String caminhoArquivo = pasta + "/categoria.pdf";
+            try {
+                PdfWriter writer = new PdfWriter(caminhoArquivo);
+                PdfDocument pdf = new PdfDocument(writer);
+                pdf.setTagged();
+                pdf.setDefaultPageSize(PageSize.A4);
+                Document doc = new Document(pdf);
+
+                //gerar cabecalho
+                // doc = ListagemCategoria.gerarCabecalhoTemporario(doc);
+                doc.setMargins(110, 36, 55, 36);
+                Header header = new Header("Listagem de Categorias");
+                Footer footer = new Footer();
+                pdf.addEventHandler(PdfDocumentEvent.START_PAGE, header);
+                pdf.addEventHandler(PdfDocumentEvent.END_PAGE, footer);
+                footer.writeTotal(pdf);
+                doc.close();
+
+                //Gerar Tabela
+                List<CategoriaProduto> categs = new CategoriaProdutoDAO().selecionarTodos();
+               // doc = ListagemCategoria.gerarTabela(doc, categs);
+
+                doc.close();
+                File file = new File(caminhoArquivo);
+                Desktop.getDesktop().open(file);
+
+            } catch (FileNotFoundException ex) {
+            } catch (Exception ex) {
+                Logger.getLogger(FrameMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+         
+    }//GEN-LAST:event_jMenu8ActionPerformed
+
     public static void main(String args[]) {
 
         FlatLightLaf.setup(new FlatGruvboxDarkMediumIJTheme());
@@ -274,6 +349,8 @@ public class FrameMenu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -282,6 +359,7 @@ public class FrameMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables

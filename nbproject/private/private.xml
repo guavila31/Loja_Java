@@ -2,18 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/jpa/CategoriaProdutoDAO.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/views/FrameMenu.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/entity/CategoriaProduto.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/views/InternalConsultaCategoria.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/jpa/GenericDAO.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/META-INF/persistence.xml</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/entity/Produto.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/jpa/ManagerFactory.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/utils/TableModelCreator.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/views/InternalConsultaProduto.java</file>
-            <file>file:/C:/Users/gusta/Documents/NetBeansProjects/ProjetoFinal/src/jpa/ProdutoDAO.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
